@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zx LeafOS 登录管理器</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PGNpcmNsZSBjeD0iMjUiIGN5PSIyNSIgcj0iMjAiIGZpbGw9ImdyZXkiIC8+PC9zdmc+"
+    />
+    <style>
+      :root,
+      body {
+        width: 100%;
+        height: 100%;
+        background: url(data:image/svg+xml;charset=utf-8;base64,PHN2ZyBpZD0ic3ZnUHJldmlldyIgdmlld0JveD0iMCAwIDEyODAgNzIwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgwIiBoZWlnaHQ9IjcyMCIgc3R5bGU9IiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZy1ncmFkaWVudCIgeDE9IjAuMTcxOTcwNDg1NTA0NzQ2MjUiIHkxPSIwLjg3NzM1NDc5MDExMTM4NTgiIHgyPSIwLjgyODAyOTUxNDQ5NTI1MzciIHkyPSIwLjEyMjY0NTIwOTg4ODYxNDEiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzZDM4NDYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyNmEyNjkiLz48L2xpbmVhckdyYWRpZW50PjxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+PGZlRHJvcFNoYWRvdyBkeD0iMyIgZHk9IjMiIHN0ZERldmlhdGlvbj0iNSIgZmxvb2QtY29sb3I9InJnYmEoMCwgMCwgMCwgMC41KSIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2JnLWdyYWRpZW50KSIvPjxlbGxpcHNlIGN4PSI4MDEuNTMyNzk5NTczMzUwOCIgY3k9IjY5NC40OTQyMTA0NDA5NDIyIiByeD0iMTA4Ljg3NjQ3ODM4ODc2NzIzIiByeT0iNTQuNDM4MjM5MTk0MzgzNjEiIGZpbGw9ImhzbGEoMTg2LjYyOTYyMzQ0Nzg1NTMsIDcwJSwgODAlLCAwLjMyODQ4MzcyODMwMTE1NTEzKSIgb3BhY2l0eT0iMC4zMjg0ODM3MjgzMDExNTUxMyIgZmlsdGVyPSJibHVyKDQ1Ljg1MDQzNjkwNTM0ODEwNHB4KSIgdHJhbnNmb3JtPSJyb3RhdGUoMjQyLjQ5NjIwNzcxMTgzOTA4LCA4MDEuNTMyNzk5NTczMzUwOCwgNjk0LjQ5NDIxMDQ0MDk0MjIpIi8+PGVsbGlwc2UgY3g9IjQ1My4xMjc5OTY5MzMwNTIxIiBjeT0iMzc2LjI2MzU5MzYwNTAyMjI3IiByeD0iODQuMjE5NjMzOTM4MjM3ODUiIHJ5PSI0Mi4xMDk4MTY5NjkxMTg5MjQiIGZpbGw9ImhzbGEoMjg2LjAwMjEzNDE0MDU2MTQsIDcwJSwgODAlLCAwLjI1ODkwMTQwMjQwMzcwMjIpIiBvcGFjaXR5PSIwLjI1ODkwMTQwMjQwMzcwMjIiIGZpbHRlcj0iYmx1cigyMi45NDc1Njg5OTYwNzQ0NzNweCkiIHRyYW5zZm9ybT0icm90YXRlKDUuNDIzNTMxMDY2NzEwOTYzLCA0NTMuMTI3OTk2OTMzMDUyMSwgMzc2LjI2MzU5MzYwNTAyMjI3KSIvPjxlbGxpcHNlIGN4PSI2NTcuODk3MTU0MzA0MzQxNiIgY3k9IjEzNy4yODY0NTI5OTM4MjQ5NSIgcng9IjgwLjMxNTgzMDA0OTE5MzY0IiByeT0iNDAuMTU3OTE1MDI0NTk2ODIiIGZpbGw9ImhzbGEoMy40MzY2MTE1NDI3NzI2Njk2LCA3MCUsIDgwJSwgMC4zODEwMTk1Nzc0MDkxNjc3KSIgb3BhY2l0eT0iMC4zODEwMTk1Nzc0MDkxNjc3IiBmaWx0ZXI9ImJsdXIoMTAuNDM0MTYwOTgyOTY5MTc3cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSg0MS45NzE5MTQzOTE1NjU2NSwgNjU3Ljg5NzE1NDMwNDM0MTYsIDEzNy4yODY0NTI5OTM4MjQ5NSkiLz48ZWxsaXBzZSBjeD0iNDg3Ljk0ODkwOTAzNzA0ODQiIGN5PSIxNTUuMzkwNTY4ODIxMjgyOCIgcng9Ijk3LjQ0MjU3ODY3OTY4MzE3IiByeT0iNDguNzIxMjg5MzM5ODQxNTgiIGZpbGw9ImhzbGEoNi44MTkwNDYzMjEyMDcxMzgsIDcwJSwgODAlLCAwLjE3NDgwMDk2NjAyMTA2NzM3KSIgb3BhY2l0eT0iMC4xNzQ4MDA5NjYwMjEwNjczNyIgZmlsdGVyPSJibHVyKDM5LjU1NzQ3NzQ5MjYyNDcycHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMzguMjMwNTM1NjA4MzczNCwgNDg3Ljk0ODkwOTAzNzA0ODQsIDE1NS4zOTA1Njg4MjEyODI4KSIvPjxyZWN0IHg9IjEyNy4wNzMyNjg1ODQ0ODQxNSIgeT0iLTYuOTIwNjM0ODg0MjI2ODQzIiB3aWR0aD0iODcuNTk3OTA2MjEzODE3MDMiIGhlaWdodD0iODcuNTk3OTA2MjEzODE3MDMiIHJ4PSIyMS44OTk0NzY1NTM0NTQyNTciIGZpbGw9ImhzbGEoMjY0LjU1OTQ2OTc1MzQwODg1LCA3MCUsIDgwJSwgMC4xNDg5ODQ2MDk1NjAyNzQ0KSIgb3BhY2l0eT0iMC4xNDg5ODQ2MDk1NjAyNzQ0IiBmaWx0ZXI9ImJsdXIoMC41MDQ5MzEyMTY3NjE1MDA1cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgyMDcuNjM0MTIzNzEyMTcyMzcsIDE3MC44NzIyMjE2OTEzOTI2NywgMzYuODc4MzE4MjIyNjgxNjcpIi8+PGNpcmNsZSBjeD0iNDQ2Ljg3OTQzOTczMzk1NDkiIGN5PSI1MTEuNjIyNjE4OTg3NTYwOSIgcj0iMzMuMDQ3NjcyNjE5MjE2NDUiIGZpbGw9ImhzbGEoNTAuNjc4OTQ3MTc4MzUzNDU0LCA3MCUsIDgwJSwgMC4yMTY1Nzk2MzM5MzUyOSkiIG9wYWNpdHk9IjAuMjE2NTc5NjMzOTM1MjkiIGZpbHRlcj0iYmx1cigyLjIzMDA1ODUwNDM0MDk0OHB4KSIgdHJhbnNmb3JtPSJyb3RhdGUoMzQzLjUwNjcwOTc4NjIwNzUsIDQ0Ni44Nzk0Mzk3MzM5NTQ5LCA1MTEuNjIyNjE4OTg3NTYwOSkiLz48ZWxsaXBzZSBjeD0iMzkyLjE0MjYwMjIxODY3MzgiIGN5PSIxNDguMTUzOTUxODIwMTI0MzIiIHJ4PSI4OS40ODA1OTYyMzQ1Mjc0NyIgcnk9IjQ0Ljc0MDI5ODExNzI2MzczNCIgZmlsbD0iaHNsYSgyNDMuNzM1NzAzMjE3MzY3NDQsIDcwJSwgODAlLCAwLjIxMTk4ODcxODcxNDYxODk0KSIgb3BhY2l0eT0iMC4yMTE5ODg3MTg3MTQ2MTg5NCIgZmlsdGVyPSJibHVyKDMwLjc3ODQyMTk4MDI1OTkzNXB4KSIgdHJhbnNmb3JtPSJyb3RhdGUoMzI3Ljc5NjIzMzY0NTMxNTE3LCAzOTIuMTQyNjAyMjE4NjczOCwgMTQ4LjE1Mzk1MTgyMDEyNDMyKSIvPjxlbGxpcHNlIGN4PSIxNzcuOTQ0NDA2NjgyNjY2MTciIGN5PSIzMTAuMjM1MjYwOTQxMDA5MSIgcng9Ijk5LjEyMTU0NDgwNjg0NDcyIiByeT0iNDkuNTYwNzcyNDAzNDIyMzYiIGZpbGw9ImhzbGEoMzM4Ljg1NDg4ODQyNDI1MDcsIDcwJSwgODAlLCAwLjI4MTcxNTk2NDQ4NDQzODYpIiBvcGFjaXR5PSIwLjI4MTcxNTk2NDQ4NDQzODYiIGZpbHRlcj0iYmx1cigzNS41NzIyMjQ4MjYyNTk2MXB4KSIgdHJhbnNmb3JtPSJyb3RhdGUoMzQyLjA1Mjc2MzE5Mjk4NDEsIDE3Ny45NDQ0MDY2ODI2NjYxNywgMzEwLjIzNTI2MDk0MTAwOTEpIi8+PGNpcmNsZSBjeD0iMzg5LjgxNjg3OTAwNjk2Mzg2IiBjeT0iNzE2Ljk2NTAyNDUzMTM3NDkiIHI9IjQ4Ljc5Mzg5OTM4NjIyODc3IiBmaWxsPSJoc2xhKDE3Mi41MDQ1NTQ2NjU2NzgwMywgNzAlLCA4MCUsIDAuMjU2Nzc5MDc0NzMzMjE4MTUpIiBvcGFjaXR5PSIwLjI1Njc3OTA3NDczMzIxODE1IiBmaWx0ZXI9ImJsdXIoMzguMTQ2OTM4NjQwMTE1NDJweCkiIHRyYW5zZm9ybT0icm90YXRlKDM3Ljk0MDUzNzY0MzA1NTM1LCAzODkuODE2ODc5MDA2OTYzODYsIDcxNi45NjUwMjQ1MzEzNzQ5KSIvPjxjaXJjbGUgY3g9Ijc0MS43NjA0MjEzNTg0MDM4IiBjeT0iMjg5LjM5ODM3ODQ3MzI3MjE1IiByPSI1Mi41NzQ5NjE5NDUzMDAyMyIgZmlsbD0iaHNsYSgxMjQuMzM3ODk4MDUxMTk5NzcsIDcwJSwgODAlLCAwLjM0MzgxMzIwNzg4MjY5NTA0KSIgb3BhY2l0eT0iMC4zNDM4MTMyMDc4ODI2OTUwNCIgZmlsdGVyPSJibHVyKDIuODgwMjg1MTg0NTU4MTI5cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgzMzguNDc3MDczNjA4MjQzMjQsIDc0MS43NjA0MjEzNTg0MDM4LCAyODkuMzk4Mzc4NDczMjcyMTUpIi8+PHJlY3QgeD0iMTI4LjE5NDYwMTQ5NTM1NTE2IiB5PSI1NDIuMDE4MjI4OTUzMDY5MiIgd2lkdGg9IjUyLjUwNTg3NTM1NjM0MjI1IiBoZWlnaHQ9IjUyLjUwNTg3NTM1NjM0MjI1IiByeD0iMTMuMTI2NDY4ODM5MDg1NTYzIiBmaWxsPSJoc2xhKDMyMS4zNDgwNzg5NDY5Njk1NywgNzAlLCA4MCUsIDAuMzUyNjg1OTE5MDg2MjE0OTQpIiBvcGFjaXR5PSIwLjM1MjY4NTkxOTA4NjIxNDk0IiBmaWx0ZXI9ImJsdXIoMTEuNTI4MDg4OTk3MDY5MjkxcHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgyNzAuODA5OTc1NzAzMTQxMywgMTU0LjQ0NzUzOTE3MzUyNjI4LCA1NjguMjcxMTY2NjMxMjQwNCkiLz48ZWxsaXBzZSBjeD0iMTA4NC4yOTI4NTI4NDU0MTI5IiBjeT0iNjI5LjU4ODMxNzA1MzMwODciIHJ4PSI4Ny4zNjI5MDQ5NTYzNDM3IiByeT0iNDMuNjgxNDUyNDc4MTcxODUiIGZpbGw9ImhzbGEoMTc1Ljc4MjY3NDk5NDYwMDksIDcwJSwgODAlLCAwLjI4MDE1MTE4NDcyNjk4MTQpIiBvcGFjaXR5PSIwLjI4MDE1MTE4NDcyNjk4MTQiIGZpbHRlcj0iYmx1cigyMi4xOTk0MjU2NTgyMjIxNDNweCkiIHRyYW5zZm9ybT0icm90YXRlKDIzNC4zNDA0NzA4MDgwMzE1NywgMTA4NC4yOTI4NTI4NDU0MTI5LCA2MjkuNTg4MzE3MDUzMzA4NykiLz48Y2lyY2xlIGN4PSIzMDEuMDA2NTM0OTQ1MDYxMDUiIGN5PSIxMjkuOTM1NTg3MDEyNzk2NTMiIHI9IjM1LjcyMjcyMjkwNjU5MTk2IiBmaWxsPSJoc2xhKDI3NS4wOTE0MjI3ODY0NTE4NiwgNzAlLCA4MCUsIDAuMTAwNjIyMDI5NjE1OTE1MTQpIiBvcGFjaXR5PSIwLjEwMDYyMjAyOTYxNTkxNTE0IiBmaWx0ZXI9ImJsdXIoNDkuNjE0NzQwODQ4NTQxMjVweCkiIHRyYW5zZm9ybT0icm90YXRlKDcuNjU1NDU5MTE1NzkzMTczLCAzMDEuMDA2NTM0OTQ1MDYxMDUsIDEyOS45MzU1ODcwMTI3OTY1MykiLz48cmVjdCB4PSI0MjQuMTQ1OTU1MDYxOTgyMTQiIHk9Ijk2LjE2MTkxMDAzODE2MTU1IiB3aWR0aD0iOTAuNzAzOTU0NjA0OTkwNzciIGhlaWdodD0iOTAuNzAzOTU0NjA0OTkwNzciIHJ4PSIyMi42NzU5ODg2NTEyNDc2OTIiIGZpbGw9ImhzbGEoMjY4Ljg0OTM2OTMzMTEzOTU0LCA3MCUsIDgwJSwgMC4zMTM4MjA0NjkzMTk3NTMzKSIgb3BhY2l0eT0iMC4zMTM4MjA0NjkzMTk3NTMzIiBmaWx0ZXI9ImJsdXIoMS40OTQwNjE1NzE5MDcwNzM4cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgzMTQuNDEwNjA4ODkxOTc4MSwgNDY5LjQ5NzkzMjM2NDQ3NzUsIDE0MS41MTM4ODczNDA2NTY5NCkiLz48cmVjdCB4PSI1NTYuODMxMzExNDEzNDE0NiIgeT0iNDYxLjM5OTU5Nzg4MDk3MDMiIHdpZHRoPSI2Mi4xMzIwNDg2MjQ0MjMwMiIgaGVpZ2h0PSI2Mi4xMzIwNDg2MjQ0MjMwMiIgcng9IjE1LjUzMzAxMjE1NjEwNTc1NSIgZmlsbD0iaHNsYSgyNjkuMTk2NzA1MjQyMjY0OSwgNzAlLCA4MCUsIDAuMTU0Mjc1Nzk2ODIxNDY1ODYpIiBvcGFjaXR5PSIwLjE1NDI3NTc5NjgyMTQ2NTg2IiBmaWx0ZXI9ImJsdXIoMi43NzcxMTM4ODA0Mjk3MTA0cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgyODEuNTA2Mjg1OTYxNDMwMywgNTg3Ljg5NzMzNTcyNTYyNjEsIDQ5Mi40NjU2MjIxOTMxODE4KSIvPjxyZWN0IHg9IjkxNy4wODA2Njk1OTQwNzY5IiB5PSIyNTQuNzkxMzkzNzA0NjIyOTIiIHdpZHRoPSI1My4wMjcxNTgwNzkxOTgyNDQiIGhlaWdodD0iNTMuMDI3MTU4MDc5MTk4MjQ0IiByeD0iMTMuMjU2Nzg5NTE5Nzk5NTYxIiBmaWxsPSJoc2xhKDExNy44NDIxODgxMDU0MzkwNSwgNzAlLCA4MCUsIDAuMjUxODgwNDEwNTAxOTIzMSkiIG9wYWNpdHk9IjAuMjUxODgwNDEwNTAxOTIzMSIgZmlsdGVyPSJibHVyKDkuMjY3NjUyMDAzNzE1MjQ5cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgzNTEuNTc0ODAyNTU5MjE4OCwgOTQzLjU5NDI0ODYzMzY3NiwgMjgxLjMwNDk3Mjc0NDIyMikiLz48cmVjdCB4PSI4MjAuNjU0MjE5MTg2OTM1MiIgeT0iNDM4LjkxOTExNTUyNzIzMTI3IiB3aWR0aD0iODkuNTUzNTgwMzUwODExNjMiIGhlaWdodD0iODkuNTUzNTgwMzUwODExNjMiIHJ4PSIyMi4zODgzOTUwODc3MDI5MDciIGZpbGw9ImhzbGEoMzQ3LjcwNzQ0MDIwNzgyMTYsIDcwJSwgODAlLCAwLjE3MDM2MTk5NDU1Nzk1NDEpIiBvcGFjaXR5PSIwLjE3MDM2MTk5NDU1Nzk1NDEiIGZpbHRlcj0iYmx1cigzNi45NDY1NTAyMzg3OTFweCkiIHRyYW5zZm9ybT0icm90YXRlKDI5Ny4wMzQ5MjA4MDA5NzI5NCwgODY1LjQzMTAwOTM2MjM0MSwgNDgzLjY5NTkwNTcwMjYzNzEpIi8+PGNpcmNsZSBjeD0iOTA5Ljg5Mjc1NDE3MTUxNzUiIGN5PSI0My45NjI0NDc1NzA1Njc2NCIgcj0iMzEuMjU0NTY3MTU2NjQwODMiIGZpbGw9ImhzbGEoMjAwLjAwMzUwODMxODM4MTA1LCA3MCUsIDgwJSwgMC4xMjQ0NjQwMzIxNDg5MzY3MykiIG9wYWNpdHk9IjAuMTI0NDY0MDMyMTQ4OTM2NzMiIGZpbHRlcj0iYmx1cigyNi41NTM1MDYwNTMxODQ2NzdweCkiIHRyYW5zZm9ybT0icm90YXRlKDE1NS40MTk2MDI4MjQ0NTc4LCA5MDkuODkyNzU0MTcxNTE3NSwgNDMuOTYyNDQ3NTcwNTY3NjQpIi8+PGNpcmNsZSBjeD0iMzMuMzAzNjI3OTA1Mjc5MTQiIGN5PSIyMTEuNjkxNDY3OTY2NDczNzQiIHI9IjQ1LjU4NDg0ODE2NTc0MTM3IiBmaWxsPSJoc2xhKDEwMS4zODI2NDI1NjMwNjQ1MSwgNzAlLCA4MCUsIDAuMzQ5MzgzODMxNzUxNjAwOCkiIG9wYWNpdHk9IjAuMzQ5MzgzODMxNzUxNjAwOCIgZmlsdGVyPSJibHVyKDM4LjYyNzkxMTkwOTYyMDc4cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgyMzUuMzU0NDQ2MTY1NTI3MDQsIDMzLjMwMzYyNzkwNTI3OTE0LCAyMTEuNjkxNDY3OTY2NDczNzQpIi8+PGNpcmNsZSBjeD0iODg3Ljk5MzQyMzc0Nzg3OCIgY3k9IjI2OC4wMzA2MTQ4NDI3NTE3MyIgcj0iMjUuMDc0OTc4MzE5ODE1MzQ0IiBmaWxsPSJoc2xhKDE3NC43MDQ0MjA4NDAxNDU5NiwgNzAlLCA4MCUsIDAuMzkxNTIwMjE4MTk3MjIxNCkiIG9wYWNpdHk9IjAuMzkxNTIwMjE4MTk3MjIxNCIgZmlsdGVyPSJibHVyKDMyLjAxNDQ3MDczMTE4MDQ4cHgpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMzQuMjUyNzA3NTM4NDY3OTQsIDg4Ny45OTM0MjM3NDc4NzgsIDI2OC4wMzA2MTQ4NDI3NTE3MykiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZmZmZiIgZm9udC1zaXplPSI4MCIgZm9udC1mYW1pbHk9IidNYXBsZSBNb25vIENOJywgbW9ub3NwYWNlIiBvcGFjaXR5PSIwLjgiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWx0ZXI9InVybCgjc2hhZG93KSI+PHRzcGFuIHg9IjUwJSIgZHk9IjAiPnp4IExlYWZPUzwvdHNwYW4+PC90ZXh0Pjwvc3ZnPg==);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        font-size: xx-large;
+      }
+      summary {
+        text-decoration: underline;
+      }
+      button,
+      summary {
+        cursor: pointer;
+      }
+      .auth-container {
+        margin: 1rem;
+        color: #333;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 400px;
+        width: 100%;
+      }
+      .auth-container h1 {
+        text-align: center;
+        margin: 0;
+        font-weight: 300;
+        color: #2c3e50;
+        font-size: 1.8rem;
+        display: none;
+      }
+      .auth-container .auth-interface {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .loading .auth-interface {
+        display: none;
+      }
+      .auth-container .prompt {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .auth-container .prompt div {
+        font-weight: 500;
+        font-size: 1rem;
+      }
+      .auth-container input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+      }
+      .auth-container input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        background-color: white;
+      }
+      .auth-container .submit-btn {
+        padding: 0.8rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .auth-container .submit-btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+      }
+      .auth-container .submit-btn:active {
+        transform: translateY(0);
+      }
+      .auth-container .load {
+        display: none;
+        color: #333;
+        text-align: center;
+        padding: 1rem;
+        background-color: rgba(236, 240, 241, 0.8);
+        border-radius: 6px;
+        font-weight: 500;
+      }
+      .loading .load {
+        display: block;
+      }
+      .auth-container .log {
+        border: 1px solid #eee;
+        padding: 1rem;
+        font-size: 0.85rem;
+        max-height: 10rem;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+      .auth-container .warn {
+        color: #f39c12;
+      }
+      .auth-container .error {
+        color: #e74c3c;
+      }
+      .auth-container details {
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 1rem;
+        background-color: #f8f9fa;
+      }
+      .auth-container details summary {
+        font-weight: 500;
+        color: #3498db;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .auth-container details summary:hover {
+        color: #2980b9;
+      }
+      .auth-container details p {
+        margin: 1rem 0 0.5rem 0;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="auth" class="loading">
+      <div class="auth-container">
+        <h1>zx LeafOS 登录</h1>
+        <span class="load">正加载</span>
+        <div class="auth-interface">
+          <label class="prompt">
+            <div>用户名：</div>
+          </label>
+          <input
+            id="input"
+            type="text"
+            placeholder="请输入用户名"
+            autocomplete="username"
+          />
+          <button type="submit" class="submit-btn">提交</button>
+        </div>
+        <details>
+          <summary>高级</summary>
+          <p>环境变量：</p>
+          <input
+            id="session-env"
+            type="text"
+            placeholder="LANG=zh_CN.UTF-8"
+            autocomplete="session-env"
+          />
+          <p>启动命令：</p>
+          <input
+            id="session-cmd"
+            type="text"
+            value="%SESSION_COMMAND%"
+            placeholder="pageos-core --command 'cage -s -- firefox --kiosk --no-remote http://127.0.0.1:12800'"
+            autocomplete="session-cmd"
+          />
+          <p>日志：</p>
+          <div class="log"></div>
+        </details>
+      </div>
+    </form>
+
+    <script>
+      (function () {
+        // 获取表单元素
+        const auth = document.getElementById("auth");
+        const loadElm = auth.querySelector(".auth-container span.load");
+        const ai = auth.querySelector(".auth-container .auth-interface");
+        const promptElm = auth.querySelector(".auth-container label.prompt");
+        const inputElm = auth.querySelector(".auth-container input#input");
+        const submitBtn = auth.querySelector(".auth-container .submit-btn");
+        const statusLog = auth.querySelector(".auth-container .log");
+
+        // 显示加载状态
+        function showLoading(message = "正加载") {
+          loadElm.textContent = message;
+          auth.classList.add("loading");
+        }
+
+        // 隐藏加载状态
+        function hideLoading() {
+          auth.classList.remove("loading");
+          inputElm.focus();
+        }
+
+        // 接口和状态
+        const ws = new WebSocket(`ws://${window.location.host}/ws`);
+        var currentState = "username"; // username: 未创建 greetd 会话, auth: 在会话中验证
+        hideLoading();
+
+        // 显示状态信息
+        function logMessage(msg, type = "info") {
+          const time = new Date().toLocaleTimeString();
+          const div = document.createElement("div");
+          div.textContent = `${time}：${msg}`;
+          if (type === "error") div.className = "error";
+          statusLog.appendChild(div);
+          statusLog.scrollTop = statusLog.scrollHeight;
+        }
+
+        // 新增一条提示信息
+        function addPrompt(text, type = "info") {
+          const message = document.createElement("div");
+          message.textContent = text;
+          message.className = type;
+          promptElm.appendChild(message);
+          promptElm.scrollTop = promptElm.scrollHeight;
+        }
+
+        // 清空提示信息
+        function clearPrompt() {
+          promptElm.innerHTML = "";
+        }
+
+        // 设定页面文字
+        function inerface_text(
+          prompt = "用户名：",
+          type = "info",
+          input_type = "text",
+          placeholder = "请输入用户名"
+        ) {
+          addPrompt(prompt, type);
+          inputElm.type = input_type;
+          inputElm.placeholder = placeholder;
+          inputElm.value = "";
+          hideLoading();
+        }
+
+        // 重置表单
+        function resetForm() {
+          clearPrompt();
+          inerface_text();
+          hideLoading();
+          currentState = "username";
+        }
+
+        // 连接
+        ws.onopen = () => {
+          logMessage("已连接到服务器");
+        };
+
+        // 断开链接
+        ws.onclose = () => {
+          logMessage("连接已关闭", "warn");
+          resetForm();
+        };
+
+        // 连接出错
+        ws.onerror = (err) => {
+          logMessage(`连接错误：${err}`, "error");
+        };
+
+        // 接收消息
+        ws.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            logMessage(`收到：${JSON.stringify(msg)}`);
+
+            switch (msg.type) {
+              case "AUTH_PROMPT":
+                currentState = "auth";
+                if (msg.message_type === "SECRET") {
+                  inerface_text(msg.message, "info", "password", "请输入密钥");
+                } else if (msg.message_type === "VISIBLE") {
+                  currentState = "auth";
+                  inerface_text(msg.message, "info", "text", "请输入文本");
+                } else if (msg.message_type === "INFO") {
+                  currentState = "auth";
+                  addPrompt(msg.message);
+                } else if (msg.message_type === "ERROR") {
+                  logMessage(`✖ greetd 错误：${msg.message}`, "error");
+                  addPrompt(msg.message, "error");
+                }
+                break;
+              case "AUTH_SUCCESS":
+                logMessage("✔ 登录成功! 正在启动会话……");
+                showLoading("登录成功，正启动会话");
+                const envStr = document.getElementById("session-env").value;
+                const cmdStr = document.getElementById("session-cmd").value;
+                // 将命令字符串分割为参数数组，处理带引号的参数
+                const cmd =
+                  cmdStr
+                    .match(/[^\s"']+|"([^"]*)"|'([^']*)'/g)
+                    ?.map((arg) => arg.replace(/^["']|["']$/g, "")) || [];
+                // 将环境变量字符串分割为键值对数组
+                const env =
+                  envStr
+                    .match(/[^\s"']+|"([^"]*)"|'([^']*)'/g)
+                    ?.map((arg) => arg.replace(/^["']|["']$/g, "")) || [];
+                ws.send(JSON.stringify({ type: "START_SESSION", cmd, env }));
+                break;
+              case "AUTH_ERROR":
+                logMessage(`✖ 错误：${msg.reason}`, "error");
+                resetForm();
+                break;
+            }
+            hideLoading();
+          } catch (e) {
+            logMessage(`消息解析错误：${e}`, "error");
+            addPrompt(`消息解析错误：${e}`, "error");
+          }
+        };
+
+        document.getElementById("auth").addEventListener("submit", (e) => {
+          e.preventDefault();
+          if (currentState === "username") {
+            const username = inputElm.value.trim();
+            if (!username) {
+              logMessage("请输入用户名", "warn");
+              addPrompt("请输入用户名", "warn");
+              return;
+            }
+            showLoading();
+            ws.send(JSON.stringify({ type: "AUTH_REQUEST", username }));
+          } else {
+            const response = inputElm.value;
+            if (!response) {
+              logMessage("请输入信息", "warn");
+              addPrompt("请输入信息", "warn");
+              return;
+            }
+            showLoading();
+            ws.send(JSON.stringify({ type: "AUTH_RESPONSE", response }));
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
