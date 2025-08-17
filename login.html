@@ -32,6 +32,7 @@
       summary {
         cursor: pointer;
       }
+      #auth,
       .auth-container {
         margin: 1rem;
         color: #333;
@@ -156,43 +157,41 @@
     </style>
   </head>
   <body>
-    <form id="auth" class="loading">
-      <div class="auth-container">
-        <h1>zx LeafOS 登录</h1>
-        <span class="load">正加载</span>
-        <div class="auth-interface">
-          <label class="prompt">
-            <div>用户名：</div>
-          </label>
-          <input
-            id="input"
-            type="text"
-            placeholder="请输入用户名"
-            autocomplete="username"
-          />
-          <button type="submit" class="submit-btn">提交</button>
-        </div>
-        <details>
-          <summary>高级</summary>
-          <p>环境变量：</p>
-          <input
-            id="session-env"
-            type="text"
-            placeholder="LANG=zh_CN.UTF-8"
-            autocomplete="session-env"
-          />
-          <p>启动命令：</p>
-          <input
-            id="session-cmd"
-            type="text"
-            value="%SESSION_COMMAND%"
-            placeholder="pageos-core --command 'cage -s -- firefox --kiosk --no-remote http://127.0.0.1:12800'"
-            autocomplete="session-cmd"
-          />
-          <p>日志：</p>
-          <div class="log"></div>
-        </details>
+    <form id="auth" class="loading auth-container">
+      <h1>zx LeafOS 登录</h1>
+      <span class="load">正加载</span>
+      <div class="auth-interface">
+        <label class="prompt">
+          <div>用户名：</div>
+        </label>
+        <input
+          id="input"
+          type="text"
+          placeholder="请输入用户名"
+          autocomplete="username"
+        />
+        <button type="submit" class="submit-btn">提交</button>
       </div>
+      <details>
+        <summary>高级</summary>
+        <p>环境变量：</p>
+        <input
+          id="session-env"
+          type="text"
+          placeholder="LANG=zh_CN.UTF-8"
+          autocomplete="session-env"
+        />
+        <p>启动命令：</p>
+        <input
+          id="session-cmd"
+          type="text"
+          value="%SESSION_COMMAND%"
+          placeholder="pageos-core --command 'cage -s -- firefox --kiosk --no-remote http://127.0.0.1:12800'"
+          autocomplete="session-cmd"
+        />
+        <p>日志：</p>
+        <div class="log"></div>
+      </details>
     </form>
 
     <script>
@@ -248,7 +247,7 @@
         }
 
         // 设定页面文字
-        function inerface_text(
+        function interface_text(
           prompt = "用户名：",
           type = "info",
           input_type = "text",
@@ -264,7 +263,7 @@
         // 重置表单
         function resetForm() {
           clearPrompt();
-          inerface_text();
+          interface_text();
           hideLoading();
           currentState = "username";
         }
@@ -295,10 +294,10 @@
               case "AUTH_PROMPT":
                 currentState = "auth";
                 if (msg.message_type === "SECRET") {
-                  inerface_text(msg.message, "info", "password", "请输入密钥");
+                  interface_text(msg.message, "info", "password", "请输入密钥");
                 } else if (msg.message_type === "VISIBLE") {
                   currentState = "auth";
-                  inerface_text(msg.message, "info", "text", "请输入文本");
+                  interface_text(msg.message, "info", "text", "请输入文本");
                 } else if (msg.message_type === "INFO") {
                   currentState = "auth";
                   addPrompt(msg.message);
